@@ -13,5 +13,6 @@ export const sendMessage = async (topic: string, message: string) => {
     topic,
     messages: [{ value: message }],
   });
+  console.log(`Sent message: ${message}`);
   await producer.disconnect();
 };

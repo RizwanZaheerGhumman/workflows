@@ -1,4 +1,5 @@
 import { Kafka } from 'kafkajs';
+import { TemporalService } from '../temporal/temporal.service';
 
 const kafka = new Kafka({
   clientId: 'my-consumer',
@@ -13,11 +14,9 @@ export const consumeMessages = async (topic: string) => {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      console.log({
-        partition,
-        offset: message.offset,
-        value: message.value.toString(),
-      });
-    },
+      if(topic === 'TRIGGER_EXAMPLE_WORKFLOW') {
+        TemporalService.startExampleWorkflow(message.value.toString());
+      }
+    }
   });
 };
