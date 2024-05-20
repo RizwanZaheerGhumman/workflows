@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  temporal:
+    image: temporalio/auto-setup:1.12.2
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - TEMPORAL_LISTENER_ADDRESS=0.0.0.0
+    ports:
+      - "7233:7233"
+    depends_on:
+      - cassandra
+    links:
+      - cassandra
+
+  cassandra:
+    image: cassandra:latest
+    ports:
+      - "9042:9042"
