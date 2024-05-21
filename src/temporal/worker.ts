@@ -6,6 +6,7 @@ async function run() {
     workflowsPath: require.resolve('./example.workflow'),
     activities,
     taskQueue: 'example',
+    namespace: 'default',
 
   });
   await worker.run();

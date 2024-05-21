@@ -5,7 +5,7 @@ import { sendMessage } from './kafka.producer';
 @Module({})
 export class KafkaModule implements OnModuleInit {
   onModuleInit() {
-    sendMessage('TRIGGER_EXAMPLE_WORKFLOW', 'Example Workflow Triggered!')
+    // sendMessage('TRIGGER_EXAMPLE_WORKFLOW', 'Example Workflow Triggered!')
     consumeMessages('TRIGGER_EXAMPLE_WORKFLOW');
   }
 }
