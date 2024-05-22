@@ -4,7 +4,7 @@ import type * as activities from './activities';
 export const setMessageSignal = defineSignal<[string]>('setMessage');
 export const getMessageQuery = defineQuery<string>('getMessage');
 
-const { exampleActivity,OnInit } = proxyActivities<typeof activities>({
+const { exampleActivity,OnInit,KFTC } = proxyActivities<typeof activities>({
   startToCloseTimeout: '1 minute',
 });
 
@@ -25,6 +25,8 @@ export async function ExampleWorkflow(name: string): Promise<string> {
 }
 
 export async function InvestmentRequest(context: object): Promise<string> {
+  console.log('Workflow started with context:', context);
   const activityResult = await OnInit(context);
-  return `Workflow end with message: ${activityResult}`;
+  const activityResult2 = await KFTC(activityResult);
+  return `Workflow end with message: ${JSON.stringify(activityResult2)}`;
 }
