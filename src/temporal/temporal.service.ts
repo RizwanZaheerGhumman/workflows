@@ -14,7 +14,6 @@ export class TemporalService {
 
   static async startExampleWorkflow(name: string): Promise<void> {
     const workFlowId = 'wf-id-' + Math.floor(Math.random() * 1000);
-    console.log(`Starting workflow with id: ${workFlowId}`);
     const workflowHandle = await this.workflowClient.start(ExampleWorkflow, { 
       taskQueue: 'example', 
       workflowId: workFlowId, 

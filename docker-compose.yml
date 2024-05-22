@@ -26,3 +26,20 @@ services:
       - "8088:8088"
     depends_on:
       - temporal
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./node_modules/@ninetydays/orm-setup/docker/db/init:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    container_name: postgres
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    container_name: redis
