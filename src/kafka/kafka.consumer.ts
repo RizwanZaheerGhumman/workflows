@@ -16,6 +16,9 @@ export const consumeMessages = async (topic: string) => {
     eachMessage: async ({ topic, partition, message }) => {
       if(topic === 'TRIGGER_EXAMPLE_WORKFLOW') {
         TemporalService.startExampleWorkflow(message.value.toString());
+      } 
+      if (topic === 'TRIGGER_INVESTMENT_REQUEST') {
+        TemporalService.investmentRequestWorkflow({amount:2,load_id:1,user_id:1});
       }
     }
   });

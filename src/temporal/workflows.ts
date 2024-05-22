@@ -1,10 +1,10 @@
 import { proxyActivities, defineSignal, defineQuery, setHandler, sleep } from '@temporalio/workflow';
-import type * as activities from './example.activity';
+import type * as activities from './activities';
 
 export const setMessageSignal = defineSignal<[string]>('setMessage');
 export const getMessageQuery = defineQuery<string>('getMessage');
 
-const { exampleActivity } = proxyActivities<typeof activities>({
+const { exampleActivity,OnInit } = proxyActivities<typeof activities>({
   startToCloseTimeout: '1 minute',
 });
 
@@ -22,4 +22,9 @@ export async function ExampleWorkflow(name: string): Promise<string> {
   const activityResult = await exampleActivity(name);
   await sleep(1*60*1000);
   return `Workflow started with message: ${activityResult}`;
+}
+
+export async function InvestmentRequest(context: object): Promise<string> {
+  const activityResult = await OnInit(context);
+  return `Workflow end with message: ${activityResult}`;
 }
