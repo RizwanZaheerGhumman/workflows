@@ -1,5 +1,5 @@
 import { WorkflowClient } from '@temporalio/client';
-import { ExampleWorkflow, InvestmentRequest } from './workflows'; 
+import { ExampleWorkflow, InvestmentCancel, InvestmentRequest } from './workflows'; 
 import { setMessageSignal, getMessageQuery } from './workflows';
 
 export class TemporalService {
@@ -27,7 +27,16 @@ export class TemporalService {
     const workflowHandle = await this.workflowClient.start(InvestmentRequest, { 
       taskQueue: 'example', 
       workflowId: workFlowId, 
-      args: [context] 
+      args: [context],
+    });
+    console.log(await workflowHandle.result());
+  }
+  static async investmentCancelWorkflow(investmentId:number): Promise<void> {
+    const workFlowId = 'wf-id-' + Math.floor(Math.random() * 1000);
+    const workflowHandle = await this.workflowClient.start(InvestmentCancel, { 
+      taskQueue: 'example', 
+      workflowId: workFlowId, 
+      args: [investmentId] 
     });
     console.log(await workflowHandle.result());
   }

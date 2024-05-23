@@ -1,13 +1,13 @@
 import * as entities from "@ninetydays/orm-setup";
 import { DataSource } from "typeorm"
 import 'dotenv/config';
-const DBConnection = new DataSource({
+const ConnectionSource = new DataSource({
   type: "postgres",
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  username: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.POSTGRES_HOST,
+  port: Number(process.env.POSTGRES_PORT),
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  database: process.env.POSTGRES_DATABASE,
   migrations:
     [
       `${__dirname}/../../../node_modules/@ninetydays/orm-setup/dist/migrations/*.js`,
@@ -15,5 +15,5 @@ const DBConnection = new DataSource({
   entities: entities,
 });
 
-export default DBConnection;
+export default ConnectionSource;
 

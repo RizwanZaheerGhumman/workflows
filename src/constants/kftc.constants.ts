@@ -24,7 +24,7 @@ export const GOODS_TYPE = {
 };
 
 
-const LOAN_STATUS = {
+export const INVESTMENT_STATUS = {
   REGISTERING: "T100", // 신청 중
   REGISTER_CANCELD: "T150", // 신청 취소
   REGISTER_COMPLETE: "T300", // 신청 완료 for migrations
@@ -37,9 +37,6 @@ const LOAN_STATUS = {
   CONTRACT_RELEASED: "S311", // 계약 – 계약의 해제
   CONTRACT_TERMINATED: "S312", // 계약 – 계약의 해지
 };
-
-exports.LOAN_STATUS = LOAN_STATUS;
-exports.INVESTMENT_STATUS = LOAN_STATUS;
 
 exports.GOODS_STATUS = {
   CANCELED: "T150", // 상품모집 취소

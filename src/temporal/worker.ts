@@ -1,5 +1,6 @@
 import { Worker } from '@temporalio/worker';
 import * as activities from './activities';
+import ConnectionSource from '../../src/config/db/data-source'
 
 async function run() {
   const worker = await Worker.create({
@@ -9,6 +10,7 @@ async function run() {
     namespace: 'default',
 
   });
+  await ConnectionSource.initialize();
   await worker.run();
 }
 
