@@ -1,6 +1,8 @@
-import { Investments, Users } from '@ninetydays/orm-setup';
-import { getInvestmentRegisterId } from '../../src/helper/investment/investment.helper';
+import { getInvestmentRegisterId, postInvestmentRegisterPayload } from '../../src/helper/investment/investment.helper';
+import 'dotenv/config';
 import { QueryRunner, getConnection } from 'typeorm';
+import axios from 'axios';
+import { CATEGORY_TO_LOAN_TYPE } from 'src/constants/kftc.constants';
 
 export async function exampleActivity(name: string): Promise<string> {
   return `Hello, ${name}!`;
@@ -40,10 +42,25 @@ export async function OnInit(context: object): Promise<object> {
 }
 export async function KFTC(context: object): Promise<any> {
   const { loan, investment_id,user_id } = context as any;
-  const user = await Users.findBy(user_id);
-  const investment = await Investments.findBy(investment_id);
+  // const user = await Users.findBy(user_id);
+  // const investment = await Investments.findBy(investment_id);
+  // TODO: Implement the logic to send the investment register to KFTC
+  const payload =
+  await postInvestmentRegisterPayload(
+    loan.kftc_goods_id,
+    CATEGORY_TO_LOAN_TYPE[loan.category],
+  );
  
+  // try {
+  //   const response = await axios.post(`${process.env.COREA_BASE_URL}/api/v2/investments/register`,postInvestmentRegisterPayload);
+  //   console.log('Response from endpoint:', response.data);
+  // } catch (error) {
+  //   console.error('Error calling endpoint:', error);
+  // }
   return {
     ...context,
+    result:{
+      inv_id:1,
+    }
   };
 }
