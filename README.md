@@ -1,73 +1,94 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# Project Name
+Microservice Workflows
 
 ## Description
+ This project is a Workflow Management System designed to handle various workflows that are consumed using Kafka. The system leverages Temporal for workflow orchestration, PostgreSQL for data persistence, Redis for caching, and Zookeeper for managing Kafka brokers. This setup provides a robust environment for handling distributed, scalable, and fault-tolerant workflow processes.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Table of Contents
 
-## Installation
+- [Project Name](#project-name)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Prerequisites](#prerequisites)
+  - [Getting Started](#getting-started)
+    - [Installation](#installation)
+    - [Running Docker](#running-docker)
+    - [Running Worker](#running-worker)
+    - [Running the Application](#running-the-application)
+  - [Running Tests](#running-tests)
+  - [Built With](#built-with)
 
-```bash
-$ npm install
+## Prerequisites
+
+Make sure you have installed the following prerequisites on your development machine:
+
+- Docker
+- Node.js (version specified in `package.json`)
+- npm (Node Package Manager, typically included with Node.js)
+- PostgreSQL client (optional, for database interaction outside the Docker container)
+
+## Getting Started
+
+To get a local copy up and running, follow these steps.
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone <repository-url>
+   cd <project-folder>
+2. Install Dependencies
+
+  ``` bash
+  $ npm install
+  ```
+## Running Docker
+  
+ To run the application locally, you need to start the Docker containers defined in the docker-compose.yml file.
+
+``` bash
+$ docker compose up -d
 ```
+ This command will start the following services:
 
-## Running the app
+ - Temporal server (temporal, listening on port 7233)
+ - Temporal Web UI (temporal-web, accessible on port 8088)
+ - PostgreSQL database (postgres, accessible on port 5432)
+ - Redis server (redis, accessible on port 6379)
+ - Zookeeper (zookeeper, accessible on port 2181)
+ - Kafka (accessible on port 9092)
 
-```bash
-# development
-$ npm run start
+ ## Running Worker
 
-# watch mode
-$ npm run start:dev
+  To start the worker locally you need to run the worker thread in worker.ts file.This will run your workflows & activities.
 
-# production mode
-$ npm run start:prod
-```
+  ``` bash
+  $ npm run start:worker
+  ```
 
-## Test
+## Run Application
+  ``` bash 
+  ## watch mode
+  $ npm run stat:dev
 
-```bash
-# unit tests
-$ npm run test
+ ## prod
+ $ npm run start:prod
+ ```
+ ## Running Tests
+ ``` bash
+ ## watch mode
+ $ npm run test:watch
 
-# e2e tests
-$ npm run test:e2e
+ ## run all test cases
+ $ npm run test
+ ```
 
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+## Built With
+ - NestJS - The Node.js framework used
+ - TypeORM - ORM used for database interactions
+ - Temporal - Workflow orchestration engine
+ - PostgreSQL - Database system
+ - Redis - In-memory data structure store
+ - Kafka - Distributed streaming platform
+ - Docker - Containerization platform
