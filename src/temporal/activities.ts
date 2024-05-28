@@ -98,9 +98,7 @@ export async function KFTC(context: any): Promise<any> {
       },
     };
   } catch (error) {
-    TemporalService.investmentCancelWorkflow(context.investment_id);
-    // TODO: implement the logic to remove existing workflow
-    return;
+    return await OnError(context.investment_id);
   }
 }
 export const OnError = async (investmentId: number): Promise<string> => {
@@ -110,6 +108,6 @@ export const OnError = async (investmentId: number): Promise<string> => {
     );
     return 'Investment Cancelled';
   } catch (error) {
-    // TODO: implement the logic to remove terminate cancel workflow
+    return 'Error in cancelling investment request';
   }
 };

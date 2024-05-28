@@ -1,20 +1,14 @@
-import { WorkflowClient } from '@temporalio/client';
 import { ExampleWorkflow, InvestmentCancel, InvestmentRequest } from './workflows'; 
 import { setMessageSignal, getMessageQuery } from './workflows';
+import { connectToTemporal } from './client';
 
 export class TemporalService {
-  private static _workflowClient: WorkflowClient;
 
-  private static get workflowClient(): WorkflowClient {
-    if (!this._workflowClient) {
-      this._workflowClient = new WorkflowClient();
-    }
-    return this._workflowClient;
-  }
-
+  // This is an examplery workflow that can be used to test the Temporal service
   static async startExampleWorkflow(name: string): Promise<void> {
+    const client = await connectToTemporal();
     const workFlowId = 'wf-id-' + Math.floor(Math.random() * 1000);
-    const workflowHandle = await this.workflowClient.start(ExampleWorkflow, { 
+    const workflowHandle = await client.workflow.start(ExampleWorkflow, { 
       taskQueue: 'example', 
       workflowId: workFlowId, 
       args: [name] 
@@ -22,18 +16,23 @@ export class TemporalService {
     console.log(await workflowHandle.result());
   }
 
+  // InvestmentRequestWorkflow is a workflow that can be used to create an investment request
   static async investmentRequestWorkflow(context: Object): Promise<void> {
+    const client = await connectToTemporal();
     const workFlowId = 'wf-id-' + Math.floor(Math.random() * 1000);
-    const workflowHandle = await this.workflowClient.start(InvestmentRequest, { 
+    const workflowHandle = await client.workflow.start(InvestmentRequest, { 
       taskQueue: 'example', 
       workflowId: workFlowId, 
       args: [context],
     });
     console.log(await workflowHandle.result());
   }
+
+  // InvestmentCancelWorkflow is a workflow that can be used to cancel an investment request
   static async investmentCancelWorkflow(investmentId:number): Promise<void> {
+    const client = await connectToTemporal();
     const workFlowId = 'wf-id-' + Math.floor(Math.random() * 1000);
-    const workflowHandle = await this.workflowClient.start(InvestmentCancel, { 
+    const workflowHandle = await client.workflow.start(InvestmentCancel, { 
       taskQueue: 'example', 
       workflowId: workFlowId, 
       args: [investmentId] 
@@ -41,9 +40,11 @@ export class TemporalService {
     console.log(await workflowHandle.result());
   }
 
+  // signalExampleWorkflow is a function that can be used to signal a running workflow
   static async signalExampleWorkflow(workflowId: string, newMessage: string): Promise<void> {
     try {
-      const workflowHandle = this.workflowClient.getHandle(workflowId);
+      const client = await connectToTemporal();
+      const workflowHandle = client.workflow.getHandle(workflowId);
       const isRunning = await this.isWorkflowRunning(workflowHandle);
       if (isRunning) {
         await workflowHandle.signal(setMessageSignal, newMessage);
@@ -55,9 +56,11 @@ export class TemporalService {
     }
   }
 
+  // queryExampleWorkflow is a function that can be used to query a running workflow
   static async queryExampleWorkflow(workflowId: string): Promise<string> {
     try {
-      const workflowHandle = this.workflowClient.getHandle(workflowId);
+      const client = await connectToTemporal();
+      const workflowHandle = client.workflow.getHandle(workflowId);
       return await workflowHandle.query(getMessageQuery);
     } catch (err) {
       console.error(`Error querying workflow: ${err.message}`);
@@ -65,8 +68,10 @@ export class TemporalService {
     }
   }
   
+  
   private static async isWorkflowRunning(workflowHandle: any): Promise<boolean> {
     try {
+       const client = await connectToTemporal();
       const result = await workflowHandle.describe();
       return result.status.name === 'RUNNING';
     } catch (err) {

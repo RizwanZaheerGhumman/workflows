@@ -10,6 +10,7 @@ async function run() {
     namespace: 'default',
 
   });
+  //TODO:Move this connection to somewhere else
   await ConnectionSource.initialize();
   await worker.run();
 }
