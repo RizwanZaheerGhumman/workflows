@@ -4,7 +4,7 @@ import type * as activities from './activities';
 export const setMessageSignal = defineSignal<[string]>('setMessage');
 export const getMessageQuery = defineQuery<string>('getMessage');
 
-const { exampleActivity,OnInit,KFTC,OnError } = proxyActivities<typeof activities>({
+const { exampleActivity,OnInit,KFTC,OnError, sendSSE } = proxyActivities<typeof activities>({
   startToCloseTimeout: '1 minute',
 });
 
