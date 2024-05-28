@@ -21,14 +21,17 @@ export const consumeMessages = async (topics: string[]) => {
         value:JSON.parse(message.value.toString()),
       });
 
-      if (topic === WORKFLOW.TRIGGER_EXAMPLE_WORKFLOW) {
-        TemporalService.startExampleWorkflow(JSON.parse(message.value.toString()));
-      }
-      if (topic === WORKFLOW.TRIGGER_INVESTMENT_REQUEST) {
-        TemporalService.investmentRequestWorkflow(JSON.parse(message.value.toString()));
-      }
-      if(topic === WORKFLOW.TRIGGER_INVESTMENT_CANCEL) {
-        TemporalService.investmentCancelWorkflow(JSON.parse(message.value.toString()));
+      switch (topic) {
+        case WORKFLOW.TRIGGER_INVESTMENT_REQUEST:
+          TemporalService.investmentRequestWorkflow(JSON.parse(message.value.toString()));
+          break;
+      
+        case WORKFLOW.TRIGGER_INVESTMENT_CANCEL:
+          TemporalService.investmentCancelWorkflow(JSON.parse(message.value.toString()));
+          break;
+      
+        default:
+          console.warn(`Unhandled topic: ${topic}`);
       }
     },
   });
