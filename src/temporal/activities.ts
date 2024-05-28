@@ -4,9 +4,12 @@ import {
   postInvestmentRegisterPayload,
 } from '../../src/helper/investment/investment.helper';
 import 'dotenv/config';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { CATEGORY_TO_LOAN_TYPE } from '../../src/constants/kftc.constants';
 import { olive } from '../../src/config/olive/olive';
+import { mockKFTCAPI } from '../helper/kftc/kftc.helper';
+
+const isMock = process.env.MOCK_KFTC_API === 'true';
 
 export async function exampleActivity(name: string): Promise<string> {
   return `Hello, ${name}!`;
@@ -50,15 +53,11 @@ export async function OnInit(context: object): Promise<object> {
     });
   }
 }
+
 export async function KFTC(context: any): Promise<any> {
   let investment: any;
   try {
     const { loan, investment_id, user_id } = context as any;
-    const user: Users = await Users.findOne({
-      where: {
-        id: user_id,
-      },
-    });
     investment = await Investments.findOne({
       where: {
         id: investment_id,
@@ -70,10 +69,15 @@ export async function KFTC(context: any): Promise<any> {
       investment,
     );
 
-    const { data, status } = await axios.post(
-      `${process.env.COREA_BASE_URL}/kftc/api`,
-      { data: { ...payload }, url: '/investments/register', method: 'POST' },
-    );
+    // TODO: Add the actual KFTC API call here
+    const response = isMock
+      ? await mockKFTCAPI()
+      : await axios.post(
+          `${process.env.COREA_BASE_URL}/kftc/api`,
+          { data: { ...payload }, url: '/investments/register', method: 'POST' },
+        );
+
+    const { data, status } = response as any;
     if (status !== 200) {
       await sendSSE({
         loanId: loan.id,
@@ -97,9 +101,11 @@ export async function KFTC(context: any): Promise<any> {
       },
     };
   } catch (error) {
+    console.error(error);
     return await OnError(context.investment_id);
   }
 }
+
 export const OnError = async (investmentId: number): Promise<string> => {
   try {
     await Investments.query(
