@@ -15,6 +15,7 @@ async function run() {
   await worker.run();
 }
 
+// Call the run function and handle any errors
 run().catch(err => {
   console.error(err);
   process.exit(1);

@@ -1,6 +1,11 @@
+/**
+ * Represents the data source configuration for connecting to a PostgreSQL database.
+ */
 import * as entities from "@ninetydays/orm-setup";
 import { DataSource } from "typeorm"
 import 'dotenv/config';
+
+
 const ConnectionSource = new DataSource({
   type: "postgres",
   host: process.env.POSTGRES_HOST,

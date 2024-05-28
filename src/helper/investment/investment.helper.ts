@@ -5,6 +5,12 @@ import {
   INVESTMENT_STATUS,
 } from '../../../src/constants/kftc.constants';
 
+/**
+ * Generates an investment register ID based on the current date and a random number.
+ * The investment register ID format is: {KFTC_ORG_CODE}_{YYYYMMDD}_IR_{randomId}
+ *
+ * @returns The generated investment register ID.
+ */
 export const getInvestmentRegisterId = () => {
   const date =
     new Date().getFullYear() +
@@ -17,6 +23,16 @@ export const getInvestmentRegisterId = () => {
 
   return investmentRegisterId;
 };
+
+/**
+ * Generates the payload for posting an investment register.
+ *
+ * @param goodId - The ID of the good.
+ * @param goodType - The type of the good. Default value is `GOODS_TYPE.NOTE_MORTGAGE_LOAN`.
+ * @param investment - The investment object.
+ * @returns The payload for posting an investment register.
+ * @throws Error if there is an error in the process.
+ */
 export const postInvestmentRegisterPayload = async (
   goodId: number,
   goodType = GOODS_TYPE.NOTE_MORTGAGE_LOAN,
@@ -27,6 +43,7 @@ export const postInvestmentRegisterPayload = async (
       .toISOString()
       .slice(0, 10)
       .replace(/-/g, '');
+
     const investment_register_id = investment.kftcInvestmentRegisterId;
 
     const user = await Users.findOne({
@@ -34,7 +51,9 @@ export const postInvestmentRegisterPayload = async (
         id: investment.userId,
       },
     });
-    const investor_info = await kftcInfo(user,Number(investment.id));
+
+    const investor_info = await kftcInfo(user);
+
     return {
       investment_register_info: {
         investment_register_id,
@@ -55,26 +74,38 @@ export const postInvestmentRegisterPayload = async (
     };
   } catch (error) {
     throw Error(`postInvestmentRegisterPayload error: ${error.message}`);
-
   }
 };
 
-const kftcInfo = async (user: Users,investmentId:number) => {
+
+/**
+ * Retrieves the KFTC information of a user.
+ *
+ * @param user - The user object.
+ * @returns The KFTC information of the user.
+ * @throws Error if there is an error in the process.
+ */
+const kftcInfo = async (user: Users) => {
   try {
     let identityNo: string;
+
     const internalEncryptor = new InternalEncrypter(
       process.env.INTERNAL_ENCRYPT_KEY,
     );
+
     if (user.isCorp) {
       const corp = await Corporations.findOne({
         where: {
           userId: user.id,
         },
       });
+
       if (!corp) {
         throw new Error(`Corporations not found: ${user.id}`);
       }
+
       identityNo = corp.corpRegNo;
+
     } else {
       identityNo = internalEncryptor.decrypt(user.ssn);
     }
@@ -93,8 +124,11 @@ const kftcInfo = async (user: Users,investmentId:number) => {
     } else {
       return { ...info, business_register_no: user.keyid };
     }
+
   } catch (error) {
     throw Error(`kftcInfo error: ${error.message}`);
   }
 };
+
+// Function to check email validation
 export const isEmail = (str: string) => /^\S+@\S+\.\S+$/.test(str);
