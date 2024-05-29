@@ -1,7 +1,7 @@
-import { InvestmentCancel, InvestmentRequest } from './workflows'; 
-import { connectToTemporal } from './client';
+import { connectToTemporal } from "src/temporal/client";
+import { InvestmentCancel, InvestmentRequest } from "../workflows";
 
-export class TemporalService {
+export class InvestmentService {
 
   // InvestmentRequestWorkflow is a workflow that can be used to create an investment request
   static async investmentRequestWorkflow(context: Object): Promise<void> {

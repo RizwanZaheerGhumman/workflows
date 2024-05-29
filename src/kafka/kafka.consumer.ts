@@ -1,6 +1,6 @@
 import { Kafka } from 'kafkajs';
-import { TemporalService } from '../temporal/temporal.service';
 import { WORKFLOW } from 'src/enums/workflow.enum';
+import { InvestmentService } from 'src/temporal/services/investment.service';
 
 /**
  * Kafka consumer module for consuming messages from Kafka topics.
@@ -39,13 +39,13 @@ export const consumeMessages = async (topics: string[]) => {
       // Handle messages based on the topic
       switch (topic) {
         case WORKFLOW.TRIGGER_INVESTMENT_REQUEST:
-          // Call the investmentRequestWorkflow method of the TemporalService
-          TemporalService.investmentRequestWorkflow(JSON.parse(message.value.toString()));
+          // Call the investmentRequestWorkflow method of the InvestmentService
+          InvestmentService.investmentRequestWorkflow(JSON.parse(message.value.toString()));
           break;
       
         case WORKFLOW.TRIGGER_INVESTMENT_CANCEL:
-          // Call the investmentCancelWorkflow method of the TemporalService
-          TemporalService.investmentCancelWorkflow(JSON.parse(message.value.toString()));
+          // Call the investmentCancelWorkflow method of the InvestmentService
+          InvestmentService.investmentCancelWorkflow(JSON.parse(message.value.toString()));
           break;
       
         default:
